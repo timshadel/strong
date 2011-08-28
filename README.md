@@ -67,3 +67,17 @@ Stuff You Care About
 * It "just works" with Node.js, Connect, Express, and Zappa when you use
   Jade, EJS, Eco, or other standard view templating libraries.
 * Works in CoffeeScript and JavaScript.
+
+
+How To Run the Unit Tests
+-------------------------
+
+First, make sure to install the module's dependencies:
+
+    npm install -d
+
+Now run jasmine:
+
+    ./node_modules/.bin/jasmine-node spec
+
+You should see the tests run.

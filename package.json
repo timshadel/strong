@@ -1,0 +1,31 @@
+{
+  "name": "strong",
+  "description": "Strong i18n for Express.js-based Frameworks",
+  "version": "0.1.0",
+  "author": "Tim Shadel <tim@shadelsoftware.com>",
+  "contributors": [ 
+    { "name": "Tim Shadel", "email": "tim@shadelsoftware.com" }
+  ],
+  "dependencies" : { 
+      "sprintf" : ">=0.1.1",
+      "glob"    : ">=2.0.0"
+  },
+  "devDependencies": {
+    "jasmine-node": ">=1.0.6"
+  },
+  "engines": {
+      "node": ">=0.4.0"
+  },
+  "keywords": ["framework", "i18n", "web", "express", "translate"],
+  "repository": {
+      "type": "git",
+      "url": "git://github.com/timshadel/strong.git"
+  },
+  "main": "index",
+  "bin": { "strengthen": "./bin/strengthen" },
+  "scripts": {
+    "test": "make test",
+    "prepublish" : "npm prune"
+  },
+  "engines": { "node": ">= 0.4.7 < 0.7.0" }
+}
