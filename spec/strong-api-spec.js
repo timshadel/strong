@@ -27,4 +27,15 @@ describe('strong-api', function(){
     expect(api.translate('everything', { locale: 'es' })).toEqual('I am a translated string for locale: es');
   });
 
+  // Interpolation
+  it('should use named arguments as substitutions', function() {
+    // Setup the test case, assuming you have this string
+    var fake_back = { 'en': { '.hello': 'Hello, %(name)' } };
+
+    // Make sure you can toss variables at it
+    var user = {'name': 'Johnny'};
+    var result = api.translate( '.hello', user );
+    expect(result).toEqual( 'Hello, Johnny' );
+  });
+
 });
