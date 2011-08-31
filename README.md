@@ -19,38 +19,7 @@ What It Looks Like
 `app.coffee`:
 
     configure ->
-      app.register '.eco' internode.detector( zappa.adapter 'eco' )
-
-*API-Backend Contract*
-
-This is how the API will expect to access the translations. The backend
-can implement access to this (potentially virtual) data structure
-however it sees fit.
-
-    {
-        "en":
-        {
-            "common_title": "Everyone Should Use This Title!!"
-          , "home":
-            {
-                "index":
-                {
-                    "title": "My Page Title"
-                }
-            }
-        }
-      , "fr":
-        {
-            "common_title": "Everyone Should Use This FRENCH Title!!"
-          , "home":
-            {
-                "index":
-                {
-                    "title": "My FRENCH Page Title"
-                }
-            }
-        }
-    }
+      app.register '.eco' strong.attractors( zappa.adapter 'eco' )
 
 *Simple Default Backend File Setup*
 
@@ -93,3 +62,37 @@ Now run jasmine:
     ./node_modules/.bin/jasmine-node spec
 
 You should see the tests run.
+
+
+Write Your Own Backend
+----------------------
+
+Want to store your translations in Redis, MongoDB, or some other cool
+new thing? It's easy. The API will handle all the substitutions, and
+selection among pluralization options.
+
+*API-Backend Contract*
+
+This is how the API will expect to access the translations.
+
+*Replace the storage backend*
+
+    strong.back = require('strong-redis');
+
+*It must respond to `navigate` calls like this:*
+
+    # All keys will be of the form '[locale].[path].[key]'
+    strong.back.navigate('en.home.index.title');
+
+*When that key corresponds to a message that should be pluralized, return a Map:*
+
+    {
+        'one': '1 message'
+      , 'other': '{count} messages'
+    }
+
+*Otherwise, simply return the string:*
+
+    'Hello, {name.first}'
+
+And you're done!
