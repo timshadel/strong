@@ -27,15 +27,27 @@ This is how the API will expect to access the translations. The backend
 can implement access to this (potentially virtual) data structure
 however it sees fit.
 
-`locales['en']`:
-
     {
-        "common_title": "Everyone Should Use This Title!!"
-      , "home":
+        "en":
         {
-            "index":
+            "common_title": "Everyone Should Use This Title!!"
+          , "home":
             {
-                "title": "My Page Title"
+                "index":
+                {
+                    "title": "My Page Title"
+                }
+            }
+        }
+      , "fr":
+        {
+            "common_title": "Everyone Should Use This FRENCH Title!!"
+          , "home":
+            {
+                "index":
+                {
+                    "title": "My FRENCH Page Title"
+                }
             }
         }
     }
