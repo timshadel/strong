@@ -4,10 +4,21 @@ Strong i18n
 Simply the best way to internationalize your Node.js app if you're
 serious about your work.
 
-What It Looks Like
-------------------
+Install It
+----------
 
-*API Use*
+We haven't released it to the public yet; it's dev-only.
+
+    git clone git@github.com:timshadel/strong.git
+    cd strong
+    npm link
+
+Connect it to your app:
+
+    npm link strong
+
+Use It
+------
 
 `views/home/index.eco`:
 
@@ -20,8 +31,6 @@ What It Looks Like
 
     configure ->
       app.register '.eco' strong.attractors( zappa.adapter 'eco' )
-
-*Simple Default Backend File Setup*
 
 `locales/home/index/en.json`:
 
