@@ -88,11 +88,11 @@ This is how the API will expect to access the translations.
 
     {
         'one': '1 message'
-      , 'other': '{count} messages'
+      , 'other': '%{count} messages'
     }
 
 *Otherwise, simply return the string:*
 
-    'Hello, {name.first}'
+    'Hello, %{name.first}'
 
 And you're done!

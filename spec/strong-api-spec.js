@@ -32,14 +32,14 @@ describe('strong', function(){
 
   // Interpolation
   it('should use named arguments as substitutions', function() {
-    strong.back.putAtPath('en.hello', 'Hello, {name}');
+    strong.back.putAtPath('en.hello', 'Hello, %{name}');
     // Make sure you can toss variables at it
     var user = { name: 'Johnny' };
     expect(strong.translate( 'hello', user )).toEqual( 'Hello, Johnny' );
   });
   
   it('should navigate the object to fill substitution arguments', function() {
-    strong.back.putAtPath('en.hello', 'Hello, {name.first}');
+    strong.back.putAtPath('en.hello', 'Hello, %{name.first}');
     // Make sure you can use dot notation
     var user = { name: { first: 'Johnny', last: 'Smith' } };
     expect(strong.translate( 'hello', user )).toEqual( 'Hello, Johnny' );
