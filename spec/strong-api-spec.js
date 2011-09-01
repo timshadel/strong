@@ -45,4 +45,13 @@ describe('strong', function(){
     expect(strong.translate( 'hello', user )).toEqual( 'Hello, Johnny' );
   });
 
+  // Pluralization
+  it('should select an appropriate pluralization option', function() {
+    strong.back.putAtPath('en.message_count', { one: '1 message', other: '%{count} messages' } );
+  
+    expect(strong.translate( 'message_count', { count: 0 } )).toEqual( '0 messages' );
+    expect(strong.translate( 'message_count', { count: 1 } )).toEqual( '1 message' );
+    expect(strong.translate( 'message_count', { count: 2 } )).toEqual( '2 messages' );
+  });
+
 });
