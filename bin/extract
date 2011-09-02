@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+var path = process.argv[2];
+
+// Print all of the news items on hackernews
+var jsdom = require('jsdom');
+
+jsdom.env({
+  html: path,
+  scripts: [
+    'http://code.jquery.com/jquery-1.5.min.js'
+  ],
+  done: function(errors, window) {
+    var $ = window.$;
+    $.fn.textNodes = function() {
+        var ret = [];
+
+        (function(el){
+            if (!el) return;
+            if ((el.nodeType == 3)||(el.nodeName =="BR"))
+                ret.push(el);
+            else
+                for (var i=0; i < el.childNodes.length; ++i)
+                    arguments.callee(el.childNodes[i]);
+        })(this[0]);
+        return $(ret);
+    }
+
+    // print all text segments -- this is what we need to translate
+    var nodes = $("body").textNodes();
+    nodes.each(function(index) {
+      var text = nodes[index]._text.trim();
+      if (text.length > 0)
+        console.log(text);
+    });
+  }
+});
