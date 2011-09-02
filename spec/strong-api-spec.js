@@ -54,4 +54,11 @@ describe('strong', function(){
     expect(strong.translate( 'message_count', { count: 2 } )).toEqual( '2 messages' );
   });
 
+  // Not found
+  it('should raise a TranslationNotFound error when the key isn\'t found.', function() {
+    strong.back.putAtPath('zh.everything', 'I am a translated string for locale: zh');
+    expect(function(){ strong.translate('everything') }).toThrow("TranslationNotFound: Could not find key 'en.everything'.");
+  });
+
+
 });
