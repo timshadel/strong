@@ -5,7 +5,7 @@ describe('strong', function(){
     strong.init();
   });
 
-  it('should translate in the default default locale', function() {
+  it('should translate in the default locale', function() {
     strong.back.putAtPath('en.everything', 'I am a translated string for locale: en');
     expect(strong.translate('everything')).toEqual('I am a translated string for locale: en');
   });
@@ -57,7 +57,7 @@ describe('strong', function(){
   // Not found
   it('should raise a TranslationNotFound error when the key isn\'t found.', function() {
     strong.back.putAtPath('zh.everything', 'I am a translated string for locale: zh');
-    expect(function(){ strong.translate('everything') }).toThrow("TranslationNotFound: Could not find key 'en.everything'.");
+    expect(function(){ strong.translate('everything') }).toThrow("TranslationNotFound: Could not find key 'everything'.  Attempted: 'en.everything'");
   });
 
 
