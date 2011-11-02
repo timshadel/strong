@@ -7,16 +7,16 @@
     { "name": "Tim Shadel", "email": "tim@shadelsoftware.com" }
   ],
   "dependencies" : { 
-      "sprintf" : ">=0.1.1"
-    , "glob"    : ">=2.0.0"
-    , "underscore": ">=1.1.7"
+      "sprintf" : ">= 0.1.1"
+    , "glob"    : ">= 2.0.0"
+    , "underscore": ">= 1.1.7"
   },
   "devDependencies": {
-      "jasmine-node": ">=1.0.6"
-      , "jsdom": ">=0.2.4"
+      "jasmine-node": ">= 1.0.6"
+      , "jsdom": ">= 0.2.4"
   },
   "engines": {
-      "node": ">=0.4.0"
+      "node": ">= 0.4.0 < 0.7.0"
   },
   "keywords": ["framework", "i18n", "web", "express", "translate"],
   "repository": {
@@ -24,10 +24,8 @@
       "url": "git://github.com/timshadel/strong.git"
   },
   "main": "index",
-  "bin": { "extract": "./bin/extract" },
   "scripts": {
       "test": "./node_modules/.bin/jasmine-node spec"
     , "prepublish" : "npm prune"
   },
-  "engines": { "node": ">= 0.4.7 < 0.7.0" }
 }
