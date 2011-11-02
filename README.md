@@ -7,41 +7,34 @@ serious about your work.
 Install It
 ----------
 
-We haven't released it to the public yet; it's dev-only.
+Add it to your `package.json`:
 
-    git clone git@github.com:timshadel/strong.git
-    cd strong
-    npm link
+    "dependencies": {
+        ...
+      , "strong": ">= 0.1.0"
+    }
 
-Connect it to your app:
+And then install app dependencies:
 
-    npm link strong
+    npm install -d
+
 
 Use It
 ------
 
 `views/home/index.eco`:
 
-    <!-- Use a local view key -->
-    <h1><%=t '.title' %></h1>
-    <!-- Use a global key -->
-    <h1><%=t '*common_title' %></h1>
+    <h1><%= @t 'title' %></h1>
 
 `app.coffee`:
 
-    configure ->
-      app.register '.eco' strong.attractors( zappa.adapter 'eco' )
+    @configure ->
+      @register '.eco' strong.decorator( zappa.adapter 'eco' )
 
-`locales/home/index/en.json`:
+`locales/home/index_en.json`:
 
     {
       "title": "My Page Title"
-    }
-
-`locales/en.json`:
-
-    {
-      "common_title": "Everyone Should Use This Title!!"
     }
 
 
@@ -50,27 +43,19 @@ Stuff You Care About
 
 * Each view has its own translations file.
 * Translation keys are organized into a hierarchy to match your views.
-* You can use "global" keys in any view.
+* If a translation key isn't found at one level, it backs up the hierarchy looking for it.
 * It's separated into an API and a simple default backend, which you can
   replace.
-* It won't cloud your JavaScript global namespace.
-* It "just works" with Node.js, Connect, Express, and Zappa when you use
-  Jade, EJS, Eco, or other standard view templating libraries.
+* It "just works" with Zappa when you use Eco. Other templating libraries _may_ work.
 * Works in CoffeeScript and JavaScript.
 
 
 How To Run the Unit Tests
 -------------------------
 
-First, make sure to install the module's dependencies:
+Just use `npm`:
 
-    npm install -d
-
-Now run jasmine:
-
-    ./node_modules/.bin/jasmine-node spec
-
-You should see the tests run.
+    npm tests
 
 
 Write Your Own Backend
@@ -90,7 +75,7 @@ This is how the API will expect to access the translations.
 
 *It must respond to `navigate` calls like this:*
 
-    # All keys will be of the form '[locale].[path].[key]'
+    # All keys will be of the form '<locale>.<path>.<key>'
     strong.back.navigate('en.home.index.title');
 
 *When that key corresponds to a message that should be pluralized, return a Map:*
