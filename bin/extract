@@ -1,37 +1,110 @@
 #!/usr/bin/env node
 
-var path = process.argv[2];
+var fs = require('fs')
+var p = require('path')
 
-// Print all of the news items on hackernews
+var views_path = process.argv[2];
+var locales_path = views_path + '../locales'
 var jsdom = require('jsdom');
 
-jsdom.env({
-  html: path,
-  scripts: [
-    'http://code.jquery.com/jquery-1.5.min.js'
-  ],
-  done: function(errors, window) {
-    var $ = window.$;
-    $.fn.textNodes = function() {
-        var ret = [];
+// TODO: point at views dir.
+// TODO: for each view, load the strings file.
 
-        (function(el){
-            if (!el) return;
-            if ((el.nodeType == 3)||(el.nodeName =="BR"))
-                ret.push(el);
-            else
-                for (var i=0; i < el.childNodes.length; ++i)
-                    arguments.callee(el.childNodes[i]);
-        })(this[0]);
-        return $(ret);
+var exists = function(obj) {
+  return ("undefined" !== typeof obj && obj !== null && obj !== '');
+};
+
+
+var extract = function(path) {
+  var translations;
+  var translation_path = locales_path + '/' + path.replace(/\.eco$/,'_en.json');
+  if (p.existsSync(translation_path)) {
+    translations = fs.readFileSync(translation_path, 'UTF-8');
+    if (exists(translations)) {
+      translations = JSON.parse(translations);
     }
-
-    // print all text segments -- this is what we need to translate
-    var nodes = $("body").textNodes();
-    nodes.each(function(index) {
-      var text = nodes[index]._text.trim();
-      if (text.length > 0)
-        console.log(text);
-    });
   }
-});
+  if (!exists(translations)) {
+    translations = {};
+  }
+  var view_path = views_path + '/' + path;
+  var html = fs.readFileSync(view_path, 'UTF-8').replace(/<%/g,'&lt;%').replace(/%>/g,'%&gt;')
+
+  jsdom.env({
+    html: html,
+    scripts: [
+      'http://code.jquery.com/jquery-1.5.min.js'
+    ],
+    done: function(errors, window) {
+      var $ = window.$;
+
+      var counters = {};
+
+      var nearestClass = function(jNode) {
+        var className;
+        while (!exists(className = jNode.attr('class'))) {
+          jNode = $(jNode.parent());
+        }
+        var keys = className.split(/\s+/);
+        return keys[0];
+      }
+
+      var keyBase = function(jNode) {
+        var key = jNode.attr("id");
+        if (!exists(key)) {
+          key = nearestClass(jNode);
+          if (exists(key)) {
+            var counter = counters[key];
+            if (!exists(counter)) {
+              counter = counters[key] = 0;
+            } else {
+              counter = counters[key] = counter + 1;
+            }
+            if (counter > 0) {
+              key = key + '_' + counter;
+            }
+          }
+        }
+        return key;
+      }
+
+      var traverse = function(node) {
+        var jNode = $(node);
+        var children = jNode.children();
+        var title = jNode.attr("title");
+        if (title !== '' && !title.match(/^</)) {
+          var base = keyBase(jNode);
+          var key = base + "_title";
+          jNode.attr("title", "&lt;%= @t '" + key + "' %&gt;");
+          translations[key] = title;
+        }
+        if (children.length === 0) {
+          var html = jNode.html();
+          if (html !== '' && !html.match(/^&/)) {
+            var base = keyBase(jNode);
+            var key = base + '_text';
+            jNode.html("&lt;%= @t '" + key + "' %&gt;")
+            translations[key] = html;
+          }
+        } else {
+          children.each(function(){
+            traverse($(this));
+          });
+        }
+      };
+
+      traverse($("body"));
+      // TODO: Figure out how to get a result out of this thing...
+      var html = $("body").html();
+      html = html.replace(/&lt;%/g,'<%').replace(/%&gt;/g,'%>').replace(/&amp;lt;%/g,'<%').replace(/%&amp;gt;/g,'%>');
+      console.log(html);
+      console.log(JSON.stringify(translations, null, 4));
+
+      fs.writeFileSync(translation_path, JSON.stringify(translations, null, 4));
+      fs.writeFileSync(view_path, html);
+    }
+  });
+}
+
+var path = process.argv[3];
+extract(path);
