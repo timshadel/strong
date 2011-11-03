@@ -24,6 +24,7 @@
       "url": "git://github.com/timshadel/strong.git"
   },
   "main": "index",
+  "bin": { "extract": "./bin/extract" },
   "scripts": {
       "test": "./node_modules/.bin/jasmine-node spec"
     , "prepublish" : "npm prune"
