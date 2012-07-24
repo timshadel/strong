@@ -16,6 +16,13 @@ describe('strong', function(){
     expect(strong.translate('everything')).toEqual('I am a translated string for locale: de');
   });
 
+  it('should translate in IETF default locale', function() {
+    strong.back.putAtPath('pt.everything', 'I am a translated string for locale: pt');
+    strong.back.putAtPath('pt-br.everything', 'I am a translated string for locale: pt-br');
+    strong.default_locale = 'pt-BR';
+    expect(strong.translate('everything')).toEqual('I am a translated string for locale: pt-br');
+  });
+
   it('should translate in the default locale if not found in locale', function() {
     strong.back.putAtPath('de.everything', 'I am a translated string for locale: de');
     strong.default_locale = 'DE';
@@ -28,6 +35,21 @@ describe('strong', function(){
     strong.default_locale = 'de';
     strong.locale = 'en';
     expect(strong.translate('everything')).toEqual('I am a translated string for locale: en');
+  });
+
+  it('should translate in the current IETF locale', function() {
+    strong.back.putAtPath('es-mx.everything', 'I am a translated string for locale: es-mx');
+    strong.default_locale = 'de';
+    strong.locale = 'es-MX';
+    expect(strong.translate('everything')).toEqual('I am a translated string for locale: es-mx');
+  });
+
+  it('should translate in the current IETF locale with fallback', function() {
+    strong.back.putAtPath('es-ES.everything', 'I am a translated string for locale: es-ES');
+    strong.back.putAtPath('es.everything', 'I am a translated string for locale: es');
+    strong.default_locale = 'de';
+    strong.locale = 'es-MX';
+    expect(strong.translate('everything')).toEqual('I am a translated string for locale: es');
   });
 
   it('should translate in the current locale list', function() {
