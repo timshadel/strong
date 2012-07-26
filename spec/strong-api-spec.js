@@ -1,6 +1,7 @@
 describe('strong', function(){
   var strong = require('../lib/strong');
-  
+  var res = {};
+
   beforeEach(function () {
     strong.init();
   });
@@ -127,5 +128,80 @@ describe('strong', function(){
     expect(function(){ strong.translate('everything') }).toThrow("TranslationNotFound: Could not find key 'everything'.  Attempted: 'pt-pt.everything', 'pt.everything', 'en-us.everything', 'en.everything', 'es-es.everything', 'es.everything', 'en-gb.everything', 'pt-br.everything', 'de.everything'");
   });
 
+  // localeHelper
+  it('should parse languages from accept-language header.', function() {
+    var req = {
+      headers: {
+        "accept-language": "pt-PT,pt;q=0.9,en-US;q=0.8,en;q=0.6,es-ES;q=0.5,es;q=0.4,en-gb;q=0.3,pt-br;q=0.1"
+      }
+    }
+    var locale = strong.localeHelper(req, res);
+    expect(locale).toEqual([ 'pt-PT', 'pt', 'en-US', 'en', 'es-ES', 'es', 'en-gb', 'pt-br' ]);
+  });
+
+  it('should work with missing accept-language header.', function() {
+    var req = {
+      headers: {}
+    }
+    var locale = strong.localeHelper(req, res);
+
+    expect(locale).toBeUndefined();
+  });
+
+  it('should work with Express 3 req.acceptedLanguages.', function() {
+    var req = {
+      acceptedLanguages: [ 'pt-PT', 'pt', 'en-US', 'en', 'es-ES', 'ES', 'en-gb', 'pt-br' ]
+    }
+    var locale = strong.localeHelper(req, res);
+
+    expect(locale).toEqual(req.acceptedLanguages);
+  });
+});
+
+describe('strong.decorator', function () {
+  var strong = require('../lib/strong');
+  var mockData, mockEngine, translateMock, originalTranslate;
+
+  beforeEach(function () {
+    strong.init();
+    mockData = {};
+    mockEngine = {
+      compile: function () {
+        return function (mockData) {
+          return mockData;
+        }
+      }
+    }
+    var compileFunction = strong.decorator(mockEngine, "mockAppName").compile({}, {filename: "testfile"});
+    var template = compileFunction(mockData);
+    translateMock = jasmine.createSpy("translateMock");
+    originalTranslate = strong.translate;
+    strong.translate = translateMock;
+  });
+
+  afterEach(function () {
+    strong.translate = originalTranslate;
+  });
+
+  it('should create a t() and i18n() function.', function () {
+    expect(mockData.t).toEqual(jasmine.any(Function));
+    expect(mockData.i18n).toEqual(jasmine.any(Function));
+    expect(mockData.i18n).toEqual(mockData.t);
+  });
+
+  it('should call translate with key and view_path.', function () {
+    mockData.t.apply({}, ['everything']);
+    expect(translateMock).toHaveBeenCalledWith("everything", { view_path: [ 'mockAppName', 'testfile' ] });
+  });
+
+  it('should call translate with res.locals.locale if it exists.', function () {
+    mockData.t.apply({locale:['es','zh']}, ['everything']);
+    expect(translateMock).toHaveBeenCalledWith("everything", { locale: ['es', 'zh'], view_path: [ 'mockAppName', 'testfile' ] });
+  });
+
+  it('should override res.locals.locale with options passed to t().', function () {
+    mockData.t.apply({locals:{locale:['es','zh']}}, ['everything', {locale:['pt-BR', 'en']}]);
+    expect(translateMock).toHaveBeenCalledWith("everything", { locale: ['pt-BR', 'en'], view_path: [ 'mockAppName', 'testfile' ] });
+  });
 
 });
