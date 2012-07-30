@@ -98,10 +98,11 @@ Stuff You Care About
 
 How To Run the Unit Tests
 -------------------------
+[![Build Status](https://secure.travis-ci.org/fs-webdev/strong.png)](http://travis-ci.org/fs-webdev/strong)
 
 Just use `npm`:
 
-    npm tests
+    npm test
 
 
 Write Your Own Backend
