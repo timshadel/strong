@@ -4,6 +4,8 @@ Strong i18n
 Simply the best way to internationalize your Node.js app if you're
 serious about your work.
 
+[![Build Status](https://buildhive.cloudbees.com/job/fs-webdev/job/strong/badge/icon)](https://buildhive.cloudbees.com/job/fs-webdev/job/strong/)
+
 Install It
 ----------
 
