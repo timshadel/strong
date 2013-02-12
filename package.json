@@ -3,10 +3,19 @@
   "description": "Strong i18n for Express.js-based applications",
   "version": "0.2.0",
   "author": "FamilySearch Web Developers",
-  "contributors": [ 
-    { "name": "Tim Shadel", "email": "tim@shadelsoftware.com" },
-    { "name": "Stephen Lynn", "email": "stephen.g.lynn@gmail.com" },
-    { "name": "Logan Allred", "email": "allredlt@familysearch.org" }
+  "contributors": [
+    {
+      "name": "Tim Shadel",
+      "email": "tim@shadelsoftware.com"
+    },
+    {
+      "name": "Stephen Lynn",
+      "email": "stephen.g.lynn@gmail.com"
+    },
+    {
+      "name": "Logan Allred",
+      "email": "allredlt@familysearch.org"
+    }
   ],
   "licenses": [
     {
@@ -14,27 +23,37 @@
       "url": "http://github.com/fs-webdev/strong/raw/master/LICENSE"
     }
   ],
-  "dependencies" : { 
-      "sprintf" : ">= 0.1.1"
-    , "glob"    : ">= 3.0.1 < 4.0.0"
-    , "underscore": ">= 1.1.7"
+  "dependencies": {
+    "sprintf": ">= 0.1.1",
+    "glob": ">= 3.0.1 < 4.0.0",
+    "underscore": ">= 1.1.7"
   },
   "devDependencies": {
-      "jasmine-node": ">= 1.0.6"
-      , "jsdom": ">= 0.2.5"
+    "jasmine-node": ">= 1.0.6",
+    "jsdom": ">= 0.2.5",
+    "sinon": "~1.5.2",
+    "should": "~1.2.1"
   },
   "engines": {
-      "node": ">= 0.4.0 < 0.9.0"
+    "node": ">= 0.4.0 < 0.9.0"
   },
-  "keywords": ["framework", "i18n", "web", "express", "translate"],
+  "keywords": [
+    "framework",
+    "i18n",
+    "web",
+    "express",
+    "translate"
+  ],
   "repository": {
-      "type": "git",
-      "url": "git://github.com/fs-webdev/strong.git"
+    "type": "git",
+    "url": "git://github.com/fs-webdev/strong.git"
   },
   "main": "index",
-  "bin": { "extract": "./bin/extract" },
+  "bin": {
+    "extract": "./bin/extract"
+  },
   "scripts": {
-      "test": "./node_modules/.bin/jasmine-node spec"
-    , "prepublish" : "npm prune"
+    "test": "./node_modules/.bin/jasmine-node spec",
+    "prepublish": "npm prune"
   }
 }
